@@ -7,6 +7,11 @@
   import { set as setOpenAI } from './providers/openai/util.svelte'
   import { hasActiveModels } from './Models.svelte'
   import { get } from 'svelte/store'
+  import { pinMainMenu } from './Storage.svelte'
+
+  import { startNewChatWithWarning } from './Util.svelte'
+  import { faSquarePlus } from '@fortawesome/free-solid-svg-icons/index'
+
 
   $: apiKey = $apiKeyStorage
   const openAiEndpoint = $globalStorage.openAiEndpoint || ''
@@ -58,24 +63,27 @@
     }
   }
 </script>
-
-<section class="section">
+<style>
+  html, body {
+    overscroll-behavior: none;
+  }
+</style>
+<section class="section" style="padding-top: 0;">
   <article class="message">
     <div class="message-body">
       <p class="mb-4">
         <strong><a href="https://github.com/Niek/chatgpt-web" target="_blank">ChatGPT-web</a></strong>
-      is a simple one-page web interface to the OpenAI ChatGPT API. To use it, you need to register for
-      <a href="https://platform.openai.com/account/api-keys" target="_blank" rel="noreferrer">an OpenAI API key</a>
-      first. OpenAI bills per token (usage-based), which means it is a lot cheaper than
-      <a href="https://openai.com/blog/chatgpt-plus" target="_blank" rel="noreferrer">ChatGPT Plus</a>, unless you use
-      more than 10 million tokens per month. All messages are stored in your browser's local storage, so everything is
-      <strong>private</strong>. You can also close the browser tab and come back later to continue the conversation.
-    </p>
-    <p>
-      As an alternative to OpenAI, you can enter your own OpenAI-compatabile API endpoint, or use Petals swarm as a free API option for open chat models like Llama 2. 
-    </p>
+        was a decent project — but now it's even better, because I <em>kind of borrowed</em> it and
+        <strong>broke and rebuilt</strong> it to suit my needs. Now it’s my very own custom chat app, and I’m proud of it. 😎
+      </p>
+      <p class="mb-4">
+        To start a new conversation, just hit the <strong>New Chat</strong> button below. It's simple — no distractions, just you and your AI.
+      </p>
+      <p>
+        P.S. Everything is saved locally. Nobody sees anything but you. So relax.
+      </p>
     </div>
-  </article>
+  </article>  
   <article class="message" class:is-danger={!hasModels} class:is-warning={!apiKey} class:is-info={apiKey}>
     <div class="message-body">
       Set your OpenAI API key below:
@@ -119,7 +127,7 @@
     </div>
   </article>
 
-  <article class="message" class:is-danger={!hasModels || apiError} class:is-warning={!openAiEndpoint} class:is-info={openAiEndpoint && !apiError}>
+  <!-- <article class="message" class:is-danger={!hasModels || apiError} class:is-warning={!openAiEndpoint} class:is-info={openAiEndpoint && !apiError}>
     <div class="message-body">
       Set the API BASE URI for alternative OpenAI-compatible endpoints:
       <form
@@ -216,14 +224,8 @@
         </p>
       {/if}
     </div>
-  </article>
-  {#if apiKey}
-    <article class="message is-info">
-      <div class="message-body">
-        Select an existing chat on the sidebar, or
-        <a href={'#/chat/new'}>create a new chat</a>
-      </div>
-    </article>
-  {/if}
+  </article> -->
+  <div style="display: flex; justify-content: center; margin-top: 1rem;" class:is-disabled={!hasModels}>
+    <button class="button is-primary" on:click={() => location.hash = '#/chat/new'}>New Chat</button>
+  </div>  
 </section>
-<Footer pin={true} />

@@ -24,7 +24,10 @@
     faDownload,
     faUpload,
     faSquarePlus,
-    faRotateLeft
+    faRotateLeft,
+
+    faClose
+
     // faCheckCircle
   } from '@fortawesome/free-solid-svg-icons/index'
   import { exportProfileAsJSON } from './Export.svelte'
@@ -272,8 +275,6 @@
   <div class="modal-background" on:click={closeSettings} />
   <div class="modal-card wide" on:click={() => { showProfileMenu = false }}>
     <header class="modal-card-head">
-      <p class="modal-card-title">Chat Settings</p>
-      <button class="delete" aria-label="close" on:click={closeSettings}></button>
     </header>
     <section class="modal-card-body">
       {#each settingsList as setting}
@@ -289,11 +290,14 @@
           <!-- <button class="button is-info" on:click={closeSettings}>Close</button> -->
           <button class="button" title="Save changes to this profile." class:is-disabled={!chatSettings.isDirty} on:click={saveProfile}>Save</button>    
           <button class="button is-warning" title="Throw away changes to this profile." class:is-disabled={!chatSettings.isDirty} on:click={clearSettings}>Reset</button>
-          <button class="button" title="Start new chat with this profile." on:click={startNewChat}>New Chat <span class="is-hidden-mobile">&nbsp;from Current</span></button>
+          <!-- <button class="button" title="Start new chat with this profile." on:click={startNewChat}>New Chat <span class="is-hidden-mobile">&nbsp;from Current</span></button> -->
         </div>
         <div class="level-right">
           <div class="dropdown is-right is-up" class:is-active={showProfileMenu}>
             <div class="dropdown-trigger">
+              <button class="button" title="Close settings." aria-label="close" on:click={closeSettings}>
+                <span class="menu-icon"><Fa icon={faClose}/></span>
+              </button>
               <button class="button" aria-haspopup="true" aria-controls="dropdown-menu3" on:click|preventDefault|stopPropagation={() => { showProfileMenu = !showProfileMenu }}>
                 <span class="icon"><Fa icon={faEllipsis}/></span>
               </button>

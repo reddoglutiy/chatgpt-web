@@ -54,6 +54,7 @@
 
 </script>
 
+<div class="safe-area-top-fix"></div>
 <Navbar />
 <div class="side-bar-column">
   <Sidebar />

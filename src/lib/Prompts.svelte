@@ -40,7 +40,5 @@
   </div>
 </div>
 
-<div class="columns is-centered">
-  <div class="column is-half has-text-centered">or type below:</div>
-</div>
+
 {/if}

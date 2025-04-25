@@ -30,7 +30,22 @@
     faMicrophone,
     faLightbulb,
     faCommentSlash,
-    faCircleCheck
+    faCircleCheck,
+
+    faSeedling,
+
+    faPaperclip,
+
+    faLocationArrow,
+
+    faArrowRight,
+
+    faClose
+
+
+
+
+
   } from '@fortawesome/free-solid-svg-icons/index'
   import { v4 as uuidv4 } from 'uuid'
   import { getPrice } from './Stats.svelte'
@@ -41,6 +56,7 @@
   import PromptInput from './PromptInput.svelte'
   import { ChatRequest } from './ChatRequest.svelte'
   import { getModelDetail } from './Models.svelte'
+    import { faHandPaper } from '@fortawesome/free-regular-svg-icons';
 
   export let params = { chatId: '' }
   const chatId: number = parseInt(params.chatId)
@@ -360,25 +376,45 @@
 <ChatSettingsModal chatId={chatId} bind:show={showSettingsModal} />
 <div class="chat-page" style="--running-totals: {Object.entries(chat.usage || {}).length}">
 <div class="chat-content">
-<nav class="level chat-header">
+<!-- <nav class="level chat-header">
   <div class="level-left">
     <div class="level-item">
       <p class="subtitle is-5">
         <span>{chat.name || `Chat ${chat.id}`}</span>
         <a href={'#'} class="greyscale ml-2 is-hidden has-text-weight-bold editbutton" title="Rename chat" on:click|preventDefault={promptRename}><Fa icon={faPenToSquare} /></a>
         <a href={'#'} class="greyscale ml-2 is-hidden has-text-weight-bold editbutton" title="Suggest a chat name" on:click|preventDefault={suggestName}><Fa icon={faLightbulb} /></a>
-        <!-- <a href={'#'} class="greyscale ml-2 is-hidden has-text-weight-bold editbutton" title="Copy this chat" on:click|preventDefault={() => { copyChat(chatId) }}><Fa icon={faClone} /></a> -->
-        <!-- <a href={'#'} class="greyscale ml-2 is-hidden has-text-weight-bold editbutton" title="Delete this chat" on:click|preventDefault={deleteChat}><Fa icon={faTrash} /></a> -->
+        <a href={'#'} class="greyscale ml-2 is-hidden has-text-weight-bold editbutton" title="Copy this chat" on:click|preventDefault={() => { copyChat(chatId) }}><Fa icon={faClone} /></a>
+        <a href={'#'} class="greyscale ml-2 is-hidden has-text-weight-bold editbutton" title="Delete this chat" on:click|preventDefault={deleteChat}><Fa icon={faTrash} /></a>
       </p>
     </div>
   </div>
-
-  <div class="level-right">
-    <div class="level-item">
-      <!-- <button class="button is-warning" on:click={() => { clearMessages(chatId); window.location.reload() }}><span class="greyscale mr-2"><Fa icon={faTrash} /></span> Clear messages</button> -->
+  <div class="level-item has-text-centered">
+    <div>
+      <p class="is-size-6 has-text-weight-semibold mb-2">Welcome to your chat</p>
+      <p class="control queue">
+        <button title="Chat/Profile Settings" class="button" on:click|preventDefault={showSettingsModal}>
+          <span class="icon"><Fa icon={faGear} /></span>
+          <span class="ml-2">Settings</span>
+        </button>
+      </p>
+    </div>
+  </div>  
+  <div class="level-item"><p><strong>{chat.settings.model}</strong></p></div>
+</nav> -->
+<section class="section is-flex is-justify-content-center" style="align-items: flex-start; padding-top: 3rem;">
+  <div class="has-text-centered">
+    <span>{chat.name || `Chat ${chat.id}`}</span>
+    <p class="is-size-5 has-text-weight-medium mt-5">
+      <strong>{chat?.settings?.model || "gpt-3.5-turbo"}</strong>
+    </p>
+    <div class="mt-4">
+      <a on:click|preventDefault={showSettingsModal} class="button is-primary is-medium">
+        Settings
+      </a>
     </div>
   </div>
-</nav>
+</section>
+
 
 <Messages messages={$currentChatMessages} chatId={chatId} chat={chat} />
 
@@ -390,17 +426,13 @@
     </div>
   </article>
 {/if}
-
-{#if $currentChatId !== 0 && ($currentChatMessages.length === 0 || ($currentChatMessages.length === 1 && $currentChatMessages[0].role === 'system'))}
-  <Prompts bind:input />
-{/if}
 </div>
 <Footer class="prompt-input-container" strongMask={true}>
-  <form class="field has-addons has-addons-right is-align-items-flex-end" on:submit|preventDefault={() => submitForm()}>
+  <form class="field has-addons has-addons-right is-align-items-flex-end" style="margin-bottom: 1rem;" on:submit|preventDefault={() => submitForm()}>
     <p class="control is-expanded">
       <textarea
         class="input is-info is-focused chat-input auto-size"
-        placeholder="[{chat.settings.model}] Type your message here..."
+        placeholder="[{(chat?.settings?.model || "gpt-3.5-turbo")}] Ask anything"
         rows="1"
         on:keydown={e => {
           // Only send if Enter is pressed, not Shift+Enter
@@ -414,42 +446,40 @@
         bind:this={input}
       />
     </p>
-    <p class="control mic" class:is-hidden={!recognition}>
+    <!-- <p class="control mic" class:is-hidden={!recognition}>
       <button class="button" class:is-disabled={chatRequest.updating} class:is-pulse={recording} on:click|preventDefault={recordToggle}
         ><span class="icon"><Fa icon={faMicrophone} /></span></button
       >
-    </p>
-    <p class="control settings">
-      <button title="Chat/Profile Settings" class="button" on:click|preventDefault={showSettingsModal}><span class="icon"><Fa icon={faGear} /></span></button>
-    </p>
-    <p class="control queue">
+    </p> -->
+    <!-- <p class="control queue">
       <button title="Queue message, don't send yet" class:is-disabled={chatRequest.updating} class="button is-ghost" on:click|preventDefault={addNewMessage}><span class="icon"><Fa icon={faArrowUpFromBracket} /></span></button>
-    </p>
+    </p> -->
     {#if chatRequest.updating}
     <p class="control send">
       <button title="Cancel Response" class="button is-danger" type="button" on:click={cancelRequest}><span class="icon">
         {#if waitingForCancel}
         <Fa icon={faCircleCheck} />
         {:else}
-        <Fa icon={faCommentSlash} />
+        <Fa icon={faClose} />
         {/if}
       </span></button>
     </p>
     {:else}
     <p class="control send">
-      <button title="Send" class="button is-info" type="submit"><span class="icon"><Fa icon={faPaperPlane} /></span></button>
+      <button title="Send" class="button is-info" type="submit"><span class="icon"><Fa icon={faArrowRight} /></span></button>
     </p>
     {/if}
   </form>
   <!-- a target to scroll to -->
-  <div class="content has-text-centered running-total-container">
+  <!-- <div class="content has-text-centered running-total-container">
+    <p class="is-size-7">{(chat?.settings?.model || "gpt-3.5-turbo").toUpperCase()}</p>
     {#each Object.entries(chat.usage || {}) as [model, usage]}
     <p class="is-size-7 running-totals">
       <em>{getModelDetail(model || '').label || model}</em> total <span class="has-text-weight-bold">{usage.total_tokens}</span>
       tokens ~= <span class="has-text-weight-bold">${getPrice(usage, model).toFixed(6)}</span>
     </p>
-    {/each}
-  </div>
+    {/each} 
+  </div> -->
 </Footer>
 </div>
 {/if}

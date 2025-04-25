@@ -15,7 +15,10 @@
     faFileExport,
     faTrashCan,
     faEye,
-    faEyeSlash
+    faEyeSlash,
+
+    faHome
+
   } from '@fortawesome/free-solid-svg-icons/index'
   import { faSquareMinus, faSquarePlus as faSquarePlusOutline } from '@fortawesome/free-regular-svg-icons/index'
   import { addChatFromJSON, chatsStorage, checkStateChange, clearChats, clearMessages, copyChat, globalStorage, setGlobalSettingValueByKey, showSetChatSettings, pinMainMenu, getChat, deleteChat, saveChatStore, saveCustomProfile } from './Storage.svelte'
@@ -214,17 +217,16 @@
       <a href={'#'} class="dropdown-item" class:is-disabled={$chatsStorage && !$chatsStorage[0]} on:click|preventDefault={() => { confirmClearChats() }}>
         <span class="menu-icon"><Fa icon={faTrashCan}/></span> Delete ALL Chats
       </a>
-      <hr class="dropdown-divider">
-      <a href={'#'} class="dropdown-item" on:click|preventDefault={() => { if (chatId) toggleHideSummarized() }}>
+      <!-- <a href={'#'} class="dropdown-item" on:click|preventDefault={() => { if (chatId) toggleHideSummarized() }}>
         {#if $globalStorage.hideSummarized}
         <span class="menu-icon"><Fa icon={faEye}/></span> Show Summarized Messages
         {:else}
         <span class="menu-icon"><Fa icon={faEyeSlash}/></span> Hide Summarized Messages
         {/if}
-      </a>
+      </a> -->
       <hr class="dropdown-divider">
       <a href={'#/'} class="dropdown-item" on:click={close}>
-        <span class="menu-icon"><Fa icon={faKey}/></span> API Setting
+        <span class="menu-icon"><Fa icon={faHome}/></span> Home
       </a>
     </div>
   </div>
