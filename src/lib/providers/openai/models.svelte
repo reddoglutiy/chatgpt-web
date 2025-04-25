@@ -63,48 +63,105 @@ const gpt35 = {
       completion: 0.000002, // $0.002 per 1000 tokens completion
       max: 4096 // 4k max token buffer
 }
+
 const gpt3516k = {
       ...chatModelBase,
       prompt: 0.000001, // $0.001 per 1000 tokens prompt
-      completion: 0.0000015, // $0.0015 per 1000 tokens completion
+      completion: 0.000015, // $0.0015 per 1000 tokens completion
       max: 16384 // 16k max token buffer
 }
+
+const gpt41 = {
+  ...chatModelBase,
+  prompt: 0.000003, // $0.003 per 1000 tokens prompt
+  completion: 0.000012, // $0.012 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
+const gpt41mini = {
+  ...chatModelBase,
+  prompt: 0.0000008, // $0.0008 per 1000 tokens prompt
+  completion: 0.0000032, // $0.0032 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
 const gpt4 = {
-      ...chatModelBase,
-      prompt: 0.00003, // $0.03 per 1000 tokens prompt
-      completion: 0.00006, // $0.06 per 1000 tokens completion
-      max: 8192 // 8k max token buffer
+  ...chatModelBase,
+  prompt: 0.00003, // $0.03 per 1000 tokens prompt
+  completion: 0.00006, // $0.06 per 1000 tokens completion
+  max: 8192 // 8k context window
 }
+
 const gpt4o = {
-      ...chatModelBase,
-      prompt: 0.000005, // $0.005 per 1000 tokens prompt
-      completion: 0.000015, // $0.015 per 1000 tokens completion
-      max: 131072 // 128k max token buffer
+  ...chatModelBase,
+  prompt: 0.000005, // $0.005 per 1000 tokens prompt
+  completion: 0.000015, // $0.015 per 1000 tokens completion
+  max: 131072 // 128k context window
 }
+
 const gpt4omini = {
-      ...chatModelBase,
-      prompt: 0.00000015, // $0.00015 per 1000 tokens prompt
-      completion: 0.00000060, // $0.00060 per 1000 tokens completion
-      max: 131072 // 128k max token buffer
+  ...chatModelBase,
+  prompt: 0.00000015, // $0.00015 per 1000 tokens prompt
+  completion: 0.00000060, // $0.00060 per 1000 tokens completion
+  max: 131072 // 128k context window
 }
+
 const o1preview = {
-      ...chatModelBase,
-      prompt: 0.000015, // $0.015 per 1000 tokens prompt
-      completion: 0.00006, // $0.06 per 1000 tokens completion
-      max: 131072 // 128k max token buffer
+  ...chatModelBase,
+  prompt: 0.000015, // $0.015 per 1000 tokens prompt
+  completion: 0.00006, // $0.06 per 1000 tokens completion
+  max: 131072 // 128k context window
 }
+
 const o1mini = {
-      ...chatModelBase,
-      prompt: 0.000003, // $0.003 per 1000 tokens prompt
-      completion: 0.000012, // $0.012 per 1000 tokens completion
-      max: 131072 // 128k max token buffer
+  ...chatModelBase,
+  prompt: 0.000003, // $0.003 per 1000 tokens prompt
+  completion: 0.000012, // $0.012 per 1000 tokens completion
+  max: 131072 // 128k context window
 }
+
+const gpt45preview = {
+  ...chatModelBase,
+  prompt: 0.000075, // $0.075 per 1000 tokens prompt
+  completion: 0.0000375, // $0.0375 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
+const gpt41nano = {
+  ...chatModelBase,
+  prompt: 0.0000001, // $0.0001 per 1000 tokens prompt
+  completion: 0.00000025, // $0.00025 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
+const o3 = {
+  ...chatModelBase,
+  prompt: 0.00001, // $0.01 per 1000 tokens prompt
+  completion: 0.0000025, // $0.0025 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
+const o3mini = {
+  ...chatModelBase,
+  prompt: 0.0000011, // $0.0011 per 1000 tokens prompt
+  completion: 0.00000055, // $0.00055 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
+const o4mini = {
+  ...chatModelBase,
+  prompt: 0.0000011, // $0.0011 per 1000 tokens prompt
+  completion: 0.000000275, // $0.000275 per 1000 tokens completion
+  max: 131072 // 128k context window
+}
+
 const gpt432k = {
       ...chatModelBase,
       prompt: 0.00006, // $0.06 per 1000 tokens prompt
       completion: 0.00012, // $0.12 per 1000 tokens completion
       max: 32768 // 32k max token buffer
 }
+
 const gpt4128kpreview = {
       ...chatModelBase,
       prompt: 0.00001, // $0.01 per 1000 tokens prompt
@@ -130,6 +187,9 @@ export const chatModels : Record<string, ModelDetail> = {
   'gpt-3.5-turbo-16k': { ...gpt3516k },
   'gpt-3.5-turbo-16k-0613': { ...gpt3516k },
   'gpt-4': { ...gpt4 },
+  'gpt-4.1': { ...gpt41 },
+  'gpt-4.1-mini': { ...gpt41mini },
+  'gpt-4.1-nano': { ...gpt41nano },
   'gpt-4o': { ...gpt4o },
   'gpt-4o-mini': { ...gpt4omini },
   'gpt-4o-mini-2024-07-18': { ...gpt4omini },
@@ -142,8 +202,12 @@ export const chatModels : Record<string, ModelDetail> = {
   'gpt-4-32k': { ...gpt432k },
   'gpt-4-32k-0314': { ...gpt432k },
   'gpt-4-32k-0613': { ...gpt432k },
+  'gpt-4.5-preview': { ...gpt45preview },
   'o1-preview': { ...o1preview },
-  'o1-mini': { ...o1mini }
+  'o1-mini': { ...o1mini },
+  'o3': { ...o3 },
+  'o3-mini': { ...o3mini },
+  'o4-mini': { ...o4mini }
 }
 
 export const fetchRemoteModels = async () => {

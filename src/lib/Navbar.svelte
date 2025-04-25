@@ -4,33 +4,31 @@
   import logo from '../assets/logo.svg'
   import ChatOptionMenu from './ChatOptionMenu.svelte'
   import Fa from 'svelte-fa/src/fa.svelte'
-  import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons/index'
+  import { chatsStorage, checkStateChange, getChatSortOption, setChatSortOption } from './Storage.svelte'
+  import { faAngleRight, faBars, faRightLong, faXmark } from '@fortawesome/free-solid-svg-icons/index'
+  import { hasActiveModels } from './Models.svelte'
 
+  let hasModels = hasActiveModels()
 $: activeChatId = $params && $params.chatId ? parseInt($params.chatId) : undefined
 </script>
-
-<nav class="navbar is-fixed-top" aria-label="main navigation">
+<nav class="navbar is-fixed-top with-safe-area" aria-label="main navigation">
   <div class="navbar-brand">
-    <div class="navbar-item">
-      
+    <div class="navbar-item" style="margin-left: 0.55rem;">
       {#if $pinMainMenu}
-      <button class="button" on:click|stopPropagation={() => { $pinMainMenu = false }}>
-        <span class="icon">
+        <span class="icon" on:click|stopPropagation={() => $pinMainMenu = false}>
           <Fa icon={faXmark} />
         </span>
-      </button>
       {:else}
-      <button class="button" on:click|stopPropagation={() => { $pinMainMenu = true }}>
-        <span class="icon">
+        <span class="icon" on:click|stopPropagation={() => $pinMainMenu = true}>
           <Fa icon={faBars} />
         </span>
-      </button>
       {/if}
+    </div>    
+    <div class="chat-option-menu navbar-item">
+      <a class="navbar-item" href={'#/'}>
+        <p class="ml-2 is-size-6 has-text-weight-bold">QuarAI</p>
+      </a>
     </div>
-    <a class="navbar-item" href={'#/'}>
-      <img src={logo} alt="ChatGPT-web" width="24" height="24" />
-      <p class="ml-2 is-size-6 has-text-weight-bold">ChatGPT-web</p>
-    </a>
     <div class="chat-option-menu navbar-item is-pulled-right">
       <ChatOptionMenu bind:chatId={activeChatId} />
     </div>

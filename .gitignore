@@ -7,22 +7,50 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-src-tauri/gen/
+# Dependency directories
+node_modules/
+.pnp/
+.pnp.js
 
-# Editor directories and files
+# Build output
+dist/
+dist-ssr/
+build/
+out/
+
+*.local
+.env
+.env.*
+
+cert/
+*.pem
+*.crt
+*.key
+
+src-tauri/gen/
+src-tauri/target/
+
+# Temp files
+*.tmp
+*.sw?
+*.swo
+*.swn
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
 !.vscode/tasks.json
-.idea
-.DS_Store
+
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
-*.env
+
+py.py
+start.txt

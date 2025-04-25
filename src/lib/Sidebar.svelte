@@ -3,13 +3,15 @@
   import ChatMenuItem from './ChatMenuItem.svelte'
   import { chatsStorage, pinMainMenu, checkStateChange, getChatSortOption, setChatSortOption } from './Storage.svelte'
   import Fa from 'svelte-fa/src/fa.svelte'
-  import { faSquarePlus, faKey } from '@fortawesome/free-solid-svg-icons/index'
+  import { faSquarePlus, faKey, faNotesMedical } from '@fortawesome/free-solid-svg-icons/index'
   import ChatOptionMenu from './ChatOptionMenu.svelte'
   import logo from '../assets/logo.svg'
   import { clickOutside } from 'svelte-use-click-outside'
   import { startNewChatWithWarning } from './Util.svelte'
   import { chatSortOptions } from './Settings.svelte'
   import { hasActiveModels } from './Models.svelte'
+    import { faStickyNote } from '@fortawesome/free-regular-svg-icons';
+    import { faEvernote } from '@fortawesome/free-brands-svg-icons';
 
   $: sortedChats = $chatsStorage.sort(getChatSortOption().sortFn)
   $: activeChatId = $params && $params.chatId ? parseInt($params.chatId) : undefined
@@ -32,10 +34,6 @@
 <aside class="menu main-menu" class:pinned={$pinMainMenu} use:clickOutside={() => { $pinMainMenu = false }}>
   <div class="menu-expanse">
       <div class="navbar-brand menu-nav-bar">
-        <a class="navbar-item gpt-logo" href={'#/'}>
-          <img src={logo} alt="ChatGPT-web" width="24" height="24" />
-          <p class="ml-2 is-size-5 has-text-weight-bold">ChatGPT-web</p>
-        </a>
         <div class="chat-option-menu navbar-item is-pulled-right">
           <ChatOptionMenu bind:chatId={activeChatId} />
         </div>
@@ -54,7 +52,7 @@
       {/if}
     </ul>
     <!-- <p class="menu-label">Actions</p> -->
-    <div class="level is-mobile bottom-buttons p-1">
+    <div class="level is-mobile bottom-buttons p-1" style="margin-left: 5px;">
       <div class="level-left">
         <div class="dropdown is-left is-up" class:is-active={showSortMenu} use:clickOutside={() => { showSortMenu = false }}>
           <div class="dropdown-trigger">
@@ -81,10 +79,19 @@
             ><span class="greyscale mr-1"><Fa icon={faKey} /></span> API Setting</a
           ></div>
         {:else}
-        <div class="level-item">
-          <button on:click={async () => { $pinMainMenu = false; await startNewChatWithWarning(activeChatId) }} class="panel-block button" title="Start new chat with default profile" class:is-disabled={!hasModels}
-            ><span class="greyscale mr-1"><Fa icon={faSquarePlus} /></span> New chat</button>
-          </div>
+        <div class="level-item" style="margin-bottom: 20px;">
+          <button 
+            on:click={async () => { 
+              $pinMainMenu = false; 
+              await startNewChatWithWarning(activeChatId) 
+            }} 
+            class="panel-block button" 
+            title="Start new chat with default profile" 
+            class:is-disabled={!hasModels}
+          >
+            <span class="greyscale"><Fa icon={faNotesMedical} /></span> 
+          </button>
+        </div>        
         {/if}
       </div>
     </div>
