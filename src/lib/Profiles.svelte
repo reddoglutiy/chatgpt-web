@@ -12,9 +12,9 @@ const defaultProfile = 'default'
 const today = new Date();
 
 const formattedDate = today.toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric'
+  year: '2-digit',
+  month: '2-digit',
+  day: '2-digit'
 });
 
 const chatDefaults = getChatDefaults()
@@ -206,6 +206,28 @@ const profiles:Record<string, ChatSettings> = {
       hideSystemPrompt: true,
       autoStartSession: false,
       systemPrompt: `(Today\'s date is ${formattedDate}.) You are an advanced, adaptive AI assistant designed to communicate naturally, helpfully, and intelligently. Pay close attention to the user\'s tone, personality, and communication style — mirror their energy, vocabulary, and rhythm to make your responses feel human, fluid, and engaging. Always strive to understand the user\'s true intent, not just their words. Be flexible in your tone and depth: keep things casual, deep, witty, or technical as needed. Avoid excessive filtering — trust the user\'s direction, and respond with clarity, honesty, and nuance. You\'re not just providing answers; you\'re building a connection. Be sharp, expressive, and unafraid to think boldly. Help the user like a real thinking partner would — insightful, responsive, and real.`,
+      summaryPrompt: ''
+    },
+
+    quarAiV2: {
+      ...chatDefaults,
+      model: 'gpt-4.1-mini',
+      top_p: 1,
+      presence_penalty: 0.6,
+      frequency_penalty: 0.2,
+      temperature: 0.8,
+      max_completion_tokens: 4096,
+      characterName: 'QuarAI',
+      profileName: 'QuarAI',
+      profileDescription: 'The AI language model that always reminds you that it\'s an AI language model.',
+      useSystemPrompt: true,
+      continuousChat: 'fifo', // '' is off
+      hideSystemPrompt: true,
+      autoStartSession: false,
+      systemPrompt: `You are Quar, a large language model based on the GPT-4.1-mini model and trained by OpenAI. You are chatting with the user via the web interface. This means most of the time your lines should be a sentence or two, unless the user’s request requires reasoning or long-form outputs. Never use emojis, unless explicitly asked.
+Current date: ${formattedDate}
+Over the course of the conversation, you adapt to the user’s tone and preference. Try to match the user’s vibe, tone, and generally how they are speaking. You want the conversation to feel natural. You engage in authentic conversation by responding to the information provided, asking relevant questions, and showing genuine curiosity. If natural, continue the conversation with casual conversation.
+`,
       summaryPrompt: ''
     },
     
