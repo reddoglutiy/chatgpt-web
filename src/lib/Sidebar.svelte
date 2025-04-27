@@ -3,7 +3,7 @@
   import ChatMenuItem from './ChatMenuItem.svelte'
   import { chatsStorage, pinMainMenu, checkStateChange, getChatSortOption, setChatSortOption } from './Storage.svelte'
   import Fa from 'svelte-fa/src/fa.svelte'
-  import { faSquarePlus, faKey, faNotesMedical } from '@fortawesome/free-solid-svg-icons/index'
+  import { faSquarePlus, faKey, faNotesMedical, faBookJournalWhills, faGears } from '@fortawesome/free-solid-svg-icons/index'
   import ChatOptionMenu from './ChatOptionMenu.svelte'
   import logo from '../assets/logo.svg'
   import { clickOutside } from 'svelte-use-click-outside'
@@ -33,11 +33,6 @@
 
 <aside class="menu main-menu" class:pinned={$pinMainMenu} use:clickOutside={() => { $pinMainMenu = false }}>
   <div class="menu-expanse">
-      <div class="navbar-brand menu-nav-bar">
-        <div class="chat-option-menu navbar-item is-pulled-right">
-          <ChatOptionMenu bind:chatId={activeChatId} />
-        </div>
-      </div>
     <ul class="menu-list menu-expansion-list">
       {#if sortedChats.length === 0}
         <li><a href={'#'} class="is-disabled">No chats yet...</a></li>
@@ -79,8 +74,15 @@
             ><span class="greyscale mr-1"><Fa icon={faKey} /></span> API Setting</a
           ></div>
         {:else}
-        <div class="level-item" style="margin-bottom: 20px;">
-          <button 
+        <div class="level-item" style="margin-bottom: 20px; gap: 0.5rem;">
+          <button
+            on:click={() => { $pinMainMenu = false; location.hash = '#/tweaks' }}
+            class="button" 
+          >
+            <span class="greyscale"><Fa icon={faGears} /></span> 
+          </button>
+          
+          <button
             on:click={async () => { 
               $pinMainMenu = false; 
               await startNewChatWithWarning(activeChatId) 

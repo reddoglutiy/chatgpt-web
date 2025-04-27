@@ -7,16 +7,19 @@
   import { set as setOpenAI } from './providers/openai/util.svelte'
   import { hasActiveModels } from './Models.svelte'
   import { get } from 'svelte/store'
-  import { chatsStorage, getChatSortOption } from './Storage.svelte'
+  import { pinMainMenu, chatsStorage, getChatSortOption, setChatSortOption, showClockInNavbar } from './Storage.svelte'
 
+  import { startNewChatWithWarning } from './Util.svelte'
+  import { faSquarePlus } from '@fortawesome/free-solid-svg-icons/index'
   import { params } from 'svelte-spa-router'
+  import ChatMenuItem from './ChatMenuItem.svelte'
   import Fa from 'svelte-fa/src/fa.svelte'
+  import ChatOptionMenu from './ChatOptionMenu.svelte'
   import logo from '../assets/logo.svg'
   import { clickOutside } from 'svelte-use-click-outside'
   import { chatSortOptions } from './Settings.svelte'
     import { faStickyNote } from '@fortawesome/free-regular-svg-icons';
     import { faEvernote } from '@fortawesome/free-brands-svg-icons';
-    import { faGears } from '@fortawesome/free-solid-svg-icons';
 
   $: sortedChats = $chatsStorage.sort(getChatSortOption().sortFn)
   $: activeChatId = $params && $params.chatId ? parseInt($params.chatId) : undefined
@@ -90,61 +93,60 @@
   }
 </style>
 <section class="section" style="padding-top: 0;">
-  <article class="message">
+  <article class="message is-success">
     <div class="message-body">
+      
+      <ul class="menu-list menu-expansion-list">
+        {#if sortedChats.length === 0}
+        {:else}
+          {#key $checkStateChange}
+          {#each sortedChats as chat, i}
+          {#key chat.id}
+          <ChatMenuItem activeChatId={activeChatId} chat={chat} prevChat={sortedChats[i - 1]} nextChat={sortedChats[i + 1]} showDetails={true}/>
+          {/key}
+          {/each}
+          {/key}
+        {/if}
+      </ul>
+      {#if sortedChats.length === 0}
       <p class="mb-4">
-        <strong><a href="https://github.com/Niek/chatgpt-web" target="_blank">ChatGPT-web</a></strong>
-        was a decent project — but now it's even better, because I <em>kind of borrowed</em> it and
-        <strong>broke and rebuilt</strong> it to suit my needs. Now it’s my very own custom chat app, and I’m proud of it. 😎
+        Currently, there are no chats available. But don't worry, you can easily start a new one. Just click the <a href="#/chat/new">New Chat</a> button to begin a conversation and make the most of your chat experience.
       </p>
+      {:else}
       <p class="mb-4">
-        To start a new conversation, just hit the <strong>New Chat</strong> button below. It's simple — no distractions, just you and your AI.
+        <strong>Detailed chat information</strong> lets you view key details about all your chats, such as their creation date, last activity, and other relevant information. It’s a handy tool for those who want to stay on top of their chats and quickly find the information they need.
       </p>
-      <p>
-        P.S. Everything is saved locally. Nobody sees anything but you. So relax.
-      </p>
+      {/if}
     </div>
   </article>
-  <article class="message" class:is-danger={!hasModels} class:is-warning={!apiKey} class:is-info={apiKey}>
-    <div class="message-body">
-      Set your OpenAI API key below:
-
-      <form
-        class="field has-addons has-addons-right"
-        on:submit|preventDefault={async (event) => {
-          let val = ''
-          if (event.target && event.target[0].value) {
-            val = (event.target[0].value).trim()
-          }
-          setOpenAI({ apiKey: val })
-          hasModels = hasActiveModels()
-        }}
-      >
-        <p class="control is-expanded">
-          <input
-            aria-label="OpenAI API key"
-            type="password"
-            autocomplete="off"
-            class="input"
-            class:is-danger={!hasModels}
-            class:is-warning={!apiKey}
-            class:is-info={apiKey}
-            value={apiKey}
-          />
-        </p>
-        <p class="control">
-          <button class="button is-info" type="submit">Save</button>
-        </p>
-
-
-      </form>
-
-      {#if !apiKey}
-        <p class:is-danger={!hasModels} class:is-warning={!apiKey}>
-          Please enter your <a target="_blank" href="https://platform.openai.com/account/api-keys">OpenAI API key</a> above to use Open AI's ChatGPT API.
-          At least one API must be enabled to use ChatGPT-web.
-        </p>
-      {/if}
+  <article class="message is-link">
+    <div class="message-body" >
+      <p><strong>Here you can switch tweaks!</strong> Click to change the settings.</p>
+      <label class="checkbox" class:is-disabled={$globalStorage.hideTitleInNavbar} style="margin-top: 1rem;">
+        <input type="checkbox" bind:checked={$globalStorage.showClockInNavbar}>
+        Show Clock in Navbar
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" bind:checked={$globalStorage.hideTitleInNavbar}>
+        Hide Title in Navbar
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" bind:checked={$globalStorage.showDetailedChatsInfo}>
+        Show detailed information on chats
+      </label>
+      <p style="margin-top: 1rem;"><strong>Customize the action menu</strong></p>
+      <label class="checkbox" class:is-disabled={$globalStorage.hideTitleInNavbar} style="margin-top: 1rem;">
+        <input type="checkbox" bind:checked={$globalStorage.hideChatRenameButton}>
+        Hide Rename Button
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" bind:checked={$globalStorage.hideChatFavoriteButton}>
+        Hide Favorite Button
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" bind:checked={$globalStorage.hideChatDeleteButton}>
+        Hide Delete Button
+      </label>
     </div>
   </article>
 
@@ -246,8 +248,7 @@
       {/if}
     </div>
   </article> -->
-  <div style="display: flex; justify-content: center; margin-top: 1rem; gap: 1rem;">
-    <button class="button is-primary" class:is-disabled={!hasModels} on:click={() => location.hash = '#/chat/new'}>New Chat</button>
-    <button class="button is-info" on:click={() => location.hash = '#/tweaks'}><span class="mr-1"><Fa icon={faGears}></Fa></span>Tweaks</button>
-  </div>  
+  <!-- <div style="display: flex; justify-content: center; margin-top: 1rem;" class:is-disabled={!hasModels}>
+    <button class="button is-primary" on:click={() => location.hash = '#/chat/new'}>New Chat</button>
+  </div>   -->
 </section>

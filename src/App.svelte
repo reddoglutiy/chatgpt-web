@@ -12,6 +12,7 @@
   import { dispatchModalEsc, checkModalEsc } from './lib/Util.svelte'
   import { set as setOpenAI } from './lib/providers/openai/util.svelte'
   import { hasActiveModels } from './lib/Models.svelte'
+    import Tweaks from './lib/Tweaks.svelte';
 
   // Check if the API key is passed in as a "key" query parameter - if so, save it
   // Example: https://niek.github.io/chatgpt-web/#/?key=sk-...
@@ -41,6 +42,8 @@
         return $chatsStorage.find((chat) => chat.id === parseInt(detail?.params?.chatId as string)) !== undefined
       }
     }),
+
+    '/tweaks': Tweaks,
 
     '*': Home
   }
