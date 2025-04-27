@@ -8,6 +8,8 @@
   import { errorNotice } from './Util.svelte'
   import { clearAllImages, deleteImage, setImage } from './ImageStore.svelte'
 
+  export const showClockInNavbar = writable(false);
+
   // TODO: move chatsStorage to indexedDB with localStorage as a fallback for private browsing.
   //       Enough long chats will overflow localStorage.
   export const chatsStorage = persisted('chats', [] as Chat[])
@@ -67,6 +69,7 @@
       usage: {} as Record<Model, Usage>,
       startSession: false,
       sessionStarted: false,
+      isFavorite: false,
       created: Date.now(),
       lastUse: Date.now(),
       lastAccess: Date.now()

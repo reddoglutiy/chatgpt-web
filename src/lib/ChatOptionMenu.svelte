@@ -177,41 +177,41 @@
         <span class="menu-icon"><Fa icon={faGear}/></span> Chat Profile Settings
       </a>
       <hr class="dropdown-divider">
-      <a href={'#'} class:is-disabled={!hasActiveModels()} on:click|preventDefault={async () => { hasActiveModels() && close(); hasActiveModels() && await startNewChatWithWarning(chatId) }} class="dropdown-item">
+      <a href={'#'} class:is-hidden={!hasActiveModels()} on:click|preventDefault={async () => { hasActiveModels() && close(); hasActiveModels() && await startNewChatWithWarning(chatId) }} class="dropdown-item">
         <span class="menu-icon"><Fa icon={faSquarePlus}/></span> New Chat from Default
       </a>
       <a href={'#'} class:is-disabled={!chatId} on:click|preventDefault={async () => { chatId && close(); chatId && await startNewChatFromChatId(chatId) }} class="dropdown-item">
         <span class="menu-icon"><Fa icon={faSquarePlusOutline}/></span> New Chat from Current
       </a>
-      <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={() => { if (chatId) close(); copyChat(chatId) }}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!chatId} on:click|preventDefault={() => { if (chatId) close(); copyChat(chatId) }}>
         <span class="menu-icon"><Fa icon={faClone}/></span> Clone Chat
       </a>
       <hr class="dropdown-divider">
-      <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={async () => { if (chatId) await restartChatSession() }}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!chatId} on:click|preventDefault={async () => { if (chatId) await restartChatSession() }}>
         <span class="menu-icon"><Fa icon={faRotateRight}/></span> Restart Chat Session
       </a>
-      <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={() => { if (chatId) close(); clearMessages(chatId) }}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!chatId} on:click|preventDefault={() => { if (chatId) close(); clearMessages(chatId) }}>
         <span class="menu-icon"><Fa icon={faEraser}/></span> Clear Chat Messages
       </a>
-      <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={() => { if (chatId) close(); clearUsage() }}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!chatId} on:click|preventDefault={() => { if (chatId) close(); clearUsage() }}>
         <span class="menu-icon"><Fa icon={faSquareMinus}/></span> Clear Chat Usage
       </a>
-      <hr class="dropdown-divider">
-      <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={() => { close(); exportChatAsJSON(chatId) }}>
+      <hr class="dropdown-divider" class:is-hidden={!chatId}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!chatId} on:click|preventDefault={() => { close(); exportChatAsJSON(chatId) }}>
         <span class="menu-icon"><Fa icon={faDownload}/></span> Backup Chat JSON
       </a>
-      <a href={'#'} class="dropdown-item" class:is-disabled={!hasActiveModels()} on:click|preventDefault={() => { if (chatId) close(); chatFileInput.click() }}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!hasActiveModels()} on:click|preventDefault={() => { if (chatId) close(); chatFileInput.click() }}>
         <span class="menu-icon"><Fa icon={faUpload}/></span> Restore Chat JSON
       </a>
       <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={() => { if (chatId) close(); exportAsMarkdown(chatId) }}>
         <span class="menu-icon"><Fa icon={faFileExport}/></span> Export Chat Markdown
       </a>
-      <hr class="dropdown-divider">
+      <hr class="dropdown-divider" class:is-hidden={!chatId}>
       <a href={'#'} class="dropdown-item" class:is-disabled={!hasActiveModels()} on:click|preventDefault={() => { if (chatId) close(); profileFileInput.click() }}>
         <span class="menu-icon"><Fa icon={faUpload}/></span> Restore Profile JSON
       </a>
       <hr class="dropdown-divider">
-      <a href={'#'} class="dropdown-item" class:is-disabled={!chatId} on:click|preventDefault={() => { if (chatId) close(); delChat() }}>
+      <a href={'#'} class="dropdown-item" class:is-hidden={!chatId} on:click|preventDefault={() => { if (chatId) close(); delChat() }}>
         <span class="menu-icon"><Fa icon={faTrash}/></span> Delete Chat
       </a>
       <a href={'#'} class="dropdown-item" class:is-disabled={$chatsStorage && !$chatsStorage[0]} on:click|preventDefault={() => { confirmClearChats() }}>
@@ -224,8 +224,8 @@
         <span class="menu-icon"><Fa icon={faEyeSlash}/></span> Hide Summarized Messages
         {/if}
       </a> -->
-      <hr class="dropdown-divider">
-      <a href={'#/'} class="dropdown-item" on:click={close}>
+      <hr class="dropdown-divider" class:is-hidden={!chatId}>
+      <a href={'#/'} class="dropdown-item" class:is-hidden={!chatId} on:click={close}>
         <span class="menu-icon"><Fa icon={faHome}/></span> Home
       </a>
     </div>

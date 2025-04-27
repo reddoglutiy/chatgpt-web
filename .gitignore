@@ -18,15 +18,29 @@ dist-ssr/
 build/
 out/
 
+# Firebase
+.firebase/
+.firebase.json
+.firebaserc
+firebase-debug.log*
+firebase-debug.*
+firebase.json
+firebaserc
+storage.rules
+firestore.indexes.json
+firestore.rules
+
+# Env files
 *.local
 .env
 .env.*
-
+.cert
 cert/
 *.pem
 *.crt
 *.key
 
+# Rust (for Tauri)
 src-tauri/gen/
 src-tauri/target/
 

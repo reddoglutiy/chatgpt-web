@@ -106,6 +106,7 @@ export type Chat = {
     messages: Message[];
     usage: Record<Model, Usage>;
     settings: ChatSettings;
+    isFavorite: boolean;
     startSession: boolean;
     sessionStarted: boolean;
     created: number;
@@ -163,6 +164,12 @@ export type GlobalSettings = {
     enablePetals: boolean;
     pedalsEndpoint: string;
     openAiEndpoint: string;
+    showClockInNavbar: boolean;
+    hideTitleInNavbar: boolean;
+    showDetailedChatsInfo: boolean;
+    hideChatRenameButton: boolean;
+    hideChatFavoriteButton: boolean;
+    hideChatDeleteButton: boolean;
   };
 
   type SettingNumber = {
