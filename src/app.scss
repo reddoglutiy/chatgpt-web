@@ -40,6 +40,50 @@ html, body {
   overscroll-behavior: auto;
 }
 
+input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #cbcbcb;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: rgb(35, 95, 248);
+  border: 1px solid rgb(35, 95, 248)
+}
+
+input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  display: none;
+  top: 2px;
+  left: 5.2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:checked::after {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: rgb(50, 50, 50);
+    border: 1px solid #464646;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+}
+
 /* Disable callout on tap */
 a, button {
   -webkit-touch-callout: none;
@@ -645,8 +689,9 @@ aside.menu.main-menu .menu-expanse {
   z-index: 1;
 }
 .message-note {
-  padding-top: .6em;
-  margin-bottom: -0.6em;
+  padding-top: .0em;
+  margin-bottom: -0.3em;
+  font-size: 0.7rem;
 }
 .message-edit {
   display: block;
@@ -682,6 +727,9 @@ aside.menu.main-menu .menu-expanse {
 .chat-message.message {
   position: relative;
   transition: 0.3s;
+}
+.chat-message {
+  font-size: 0.9rem;
 }
 
 // .chat-message.message:hover .button-pack, article.message:focus .button-pack {
@@ -904,6 +952,12 @@ aside.menu.main-menu .menu-expanse {
   color: inherit !important;
   fill: currentColor !important;
   pointer-events: none;
+}
+
+.is-disabled-no-opacity {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 1;
 }
 
 .action-buttons {

@@ -139,6 +139,8 @@ export const globalDefaults: GlobalSettings = {
   hideChatRenameButton: false,
   hideChatFavoriteButton: false,
   hideChatDeleteButton: false,
+  hideSystemPromptInChat: true,
+  hideMessagesCountOnChat: true,
   lastProfile: 'default',
   defaultProfile: 'default',
   hideSummarized: false,

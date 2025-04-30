@@ -13,6 +13,7 @@
   export let prevChat: Chat | undefined
   export let nextChat: Chat | undefined
   export let showDetails: boolean
+  export let showExample: boolean
 
   let editing = false
   let draft = ''
@@ -36,7 +37,20 @@
   $: lastUseTime      = fmt(chat.lastUse, optsWithTime)
   $: lastAccessTime   = fmt(chat.lastAccess, optsShort)
   $: createdShort     = fmt(chat.created, optsDate)
-  $: count            = chat.messages.length > 99 ? '99+ Messages' : `${chat.messages.length} Messages`
+  $: count = (() => {
+    if (!chat.messages || !Array.isArray(chat.messages)) return '0 Messages';
+
+    const visibleMessages = showDetails
+      ? chat.messages
+      : $globalStorage.hideSystemPromptInChat
+        ? chat.messages.filter(msg => msg.role !== 'system')
+        : chat.messages;
+
+    if (!showDetails && $globalStorage.hideMessagesCountOnChat) return '';
+
+    const msgCount = visibleMessages.length;
+    return msgCount > 99 ? '99+ Messages' : `${msgCount} Messages`;
+  })();
 
   async function startEdit() {
     draft = chat.name
@@ -73,6 +87,7 @@
 <li class="chat-list-item">
   {#if editing}
     <input
+      placeholder="{chat.name}"
       bind:this={inputEl}
       bind:value={draft}
       on:blur={saveEdit}
@@ -82,11 +97,12 @@
     <div
       class="chat-menu-item"
       class:is-active={activeChatId === chat.id}
-      class:is-disabled={!hasActiveModels()}
       on:click|preventDefault={() => {
         if (!showDetails) {
-          $pinMainMenu = false
-          replace(`#/chat/${chat.id}`)
+          if (!showExample) {
+            $pinMainMenu = false
+            replace(`#/chat/${chat.id}`)
+          }
         }
       }}
     >
@@ -106,22 +122,27 @@
           <span class="chat-info">Last access: {lastAccessTime}</span>
           <span class="chat-info">{count}</span>
         {:else}
-          <span class="chat-info">{createdShort} • {count}</span>
+          <span class="chat-info">
+            {createdShort}
+            {#if !$globalStorage.hideMessagesCountOnChat && !showDetails}
+              • {count}
+            {/if}
+          </span>
         {/if}
       </div>
-      <div class="action-buttons" class:is-disabled={showDetails}>
+      <div class="action-buttons" class:is-disabled-no-opacity={showExample}>
         {#if !$globalStorage.hideChatRenameButton}
-          <button class="icon-button" disabled={showDetails} on:click|stopPropagation={startEdit}>
+          <button class="icon-button" hidden={showDetails} on:click|stopPropagation={startEdit}>
             <Fa icon={faPencil} />
           </button>
         {/if}
         {#if !$globalStorage.hideChatFavoriteButton}
-          <button class="icon-button" disabled={showDetails} on:click|stopPropagation={toggleFavorite}>
+          <button class="icon-button" hidden={showDetails} on:click|stopPropagation={toggleFavorite}>
             <Fa icon={chat.isFavorite ? faStarSolid : faStarRegular} />
           </button>
         {/if}
         {#if !$globalStorage.hideChatDeleteButton}
-          <button class="icon-button" disabled={showDetails} on:click|stopPropagation={delChat}>
+          <button class="icon-button" on:click|stopPropagation={delChat}>
             <Fa icon={faTrash} />
           </button>
         {/if}
