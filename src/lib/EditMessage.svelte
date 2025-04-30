@@ -1,7 +1,7 @@
 <script lang="ts">
   import Code from './Code.svelte'
   import { afterUpdate, createEventDispatcher, onMount } from 'svelte'
-  import { deleteMessage, deleteSummaryMessage, truncateFromMessage, submitExitingPromptsNow, continueMessage, updateMessages } from './Storage.svelte'
+  import { deleteMessage, deleteSummaryMessage, truncateFromMessage, submitExitingPromptsNow, continueMessage, updateMessages, globalStorage } from './Storage.svelte'
   import { getPrice } from './Stats.svelte'
   import SvelteMarkdown from 'svelte-markdown'
   import type { Message, Model, Chat } from './Types.svelte'
@@ -218,7 +218,8 @@
 
 <article
   id="{'message-' + message.uuid}"
-  class="message chat-message" 
+  class="message chat-message"
+  class:is-hidden={$globalStorage.hideSystemPromptInChat && isSystem}
   class:is-info={isUser}
   class:is-success={isAssistant || isImage}
   class:is-warning={isSystem}

@@ -170,6 +170,8 @@ export type GlobalSettings = {
     hideChatRenameButton: boolean;
     hideChatFavoriteButton: boolean;
     hideChatDeleteButton: boolean;
+    hideSystemPromptInChat: boolean;
+    hideMessagesCountOnChat: boolean;
   };
 
   type SettingNumber = {
