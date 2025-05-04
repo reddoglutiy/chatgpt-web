@@ -299,6 +299,11 @@
   }
 
   export const addMessage = (chatId: number, message: Message) => {
+    if (message.role === 'user') {
+      message.timestamp = Date.now();
+    } else {
+      delete message.timestamp;
+    }
     const messages = getMessages(chatId)
     if (!message.uuid) message.uuid = uuidv4()
     if (!message.created) message.created = Date.now()

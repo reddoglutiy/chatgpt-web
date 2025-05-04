@@ -143,18 +143,19 @@
     </div>
     <div class="message-body" >
       <p><strong>Here you can switch tweaks!</strong> Click to change the settings.</p>
-      <label class="checkbox" class:is-disabled={$globalStorage.hideTitleInNavbar} style="margin-top: 1rem;">
+      <p style="margin-top: 1rem;"><strong>Customize the Navbar</strong></p>
+      <label class="checkbox" style="margin-top: 1rem;">
+        <input type="checkbox" bind:checked={$globalStorage.hideTitleInNavbar}>
+        Hide Title in Navbar
+      </label>
+      <label class="checkbox" class:is-disabled={$globalStorage.hideTitleInNavbar}>
         <input type="checkbox" bind:checked={$globalStorage.showClockInNavbar}>
         Show Clock in Navbar
       </label>
       <label class="checkbox">
-        <input type="checkbox" bind:checked={$globalStorage.hideTitleInNavbar}>
-        Hide Title in Navbar
-      </label>
-      <label class="checkbox">
         <input type="checkbox" bind:checked={$globalStorage.hideSystemPromptInChat}>
-        Hide System Prompt In Chat
-      </label>  
+        Hide System Prompt in Chat
+      </label>
       <p style="margin-top: 1rem;"><strong>Customize the action menu</strong></p>
       <ul>
         <ChatMenuItem
@@ -167,11 +168,11 @@
       </ul>
       <label class="checkbox" style="margin-top: 1rem;">
         <input type="checkbox" bind:checked={$globalStorage.showDetailedChatsInfo}>
-        Show detailed information on chats
+        Show detailed information
       </label>
       <label class="checkbox">
         <input type="checkbox" bind:checked={$globalStorage.hideMessagesCountOnChat}>
-        Hide messages count on chats
+        Hide messages count
       </label>
       <label class="checkbox">
         <input type="checkbox" bind:checked={$globalStorage.hideChatRenameButton}>
@@ -184,7 +185,20 @@
       <label class="checkbox">
         <input type="checkbox" bind:checked={$globalStorage.hideChatDeleteButton}>
         Hide Delete Button
-      </label>     
+      </label>
+      <p style="margin-top: 1rem;"><strong>(WIP) Customize the chat</strong></p>
+      <label class="checkbox" style="margin-top: 1rem;">
+        <input type="checkbox" bind:checked={$globalStorage.allowEditAssistantMessage}>
+        Allow Edit Assistant Message
+      </label>
+      <label class="checkbox">
+        <input type="checkbox" bind:checked={$globalStorage.showTimestampOnMessages}>
+        Show Timestamp on Message
+      </label>
+      <label class="checkbox" class:is-disabled={!$globalStorage.showTimestampOnMessages}>
+        <input type="checkbox" bind:checked={$globalStorage.showSecondOnMessagesTimestamp}>
+        Show Seconds on Message Timestamp
+      </label> 
     </div>
   </article>
   <article class="message is-danger">
