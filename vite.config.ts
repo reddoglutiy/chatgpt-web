@@ -41,9 +41,28 @@ const plugins = [
       ]
     },
     workbox: {
-      maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
+      globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+      runtimeCaching: [
+        {
+          urlPattern: ({ request }) =>
+            request.destination === 'document' ||
+            request.destination === 'script' ||
+            request.destination === 'style' ||
+            request.destination === 'image' ||
+            request.destination === 'font',
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'quarai-static',
+            expiration: {
+              maxEntries: 100,
+              maxAgeSeconds: 60 * 60 * 24 * 30
+            }
+          }
+        }
+      ],
+      maximumFileSizeToCacheInBytes: 10 * 1024 * 1024
     }
-  })
+  })  
 ]
 
 export default defineConfig(({ command }) => {

@@ -233,7 +233,6 @@
   class:incomplete={message.finish_reason === 'length'}
 >
   <div class="message-body content">
- 
     {#if editing}
       <form class="message-edit" on:submit|preventDefault={update} on:keydown={keydown}>
         <div id={'edit-' + message.uuid} class="message-editor" bind:innerText={message.content} contenteditable
@@ -267,10 +266,11 @@
     {#if isSystem}
       <p class="is-size-7 message-note">System Prompt</p>
     {:else if message.usage}
-      <p class="is-size-7 message-note">
-        <em>{getModelDetail(message.model || '').label || message.model || defaultModel}</em> using <span class="has-text-weight-bold">{message.usage.total_tokens}</span>
-        tokens ~= <span class="has-text-weight-bold">${getPrice(message.usage, message.model || defaultModel).toFixed(6)}</span>
-      </p>
+    <p class="is-size-7 message-note">
+      <em>{getModelDetail(message.model || '').label || message.model || defaultModel}</em> —
+      <span>{message.usage.total_tokens} tokens</span>,
+      <span>${getPrice(message.usage, message.model || defaultModel).toFixed(6)}</span>
+    </p>    
     {/if}
   </div>
   <div class="tool-drawer-mask"></div>
