@@ -1,4 +1,5 @@
 <script lang="ts">
+  import * as bulmaToast from 'bulma-toast';
   import { replace } from 'svelte-spa-router'
   import type { Chat } from './Types.svelte'
   import { deleteChat, globalStorage, pinMainMenu, saveChatStore } from './Storage.svelte'
@@ -35,7 +36,7 @@
   $: lastAccessDetail = fmt(chat.lastAccess, optsDetail)
   $: createdTime      = fmt(chat.created, optsWithTime)
   $: lastUseTime      = fmt(chat.lastUse, optsWithTime)
-  $: lastAccessTime   = fmt(chat.lastAccess, optsShort)
+  $: lastAccessTime   = fmt(chat.lastAccess, optsWithTime)
   $: createdShort     = fmt(chat.created, optsDate)
   $: count = (() => {
     if (!chat.messages || !Array.isArray(chat.messages)) return '0 Messages';
@@ -52,6 +53,19 @@
     return msgCount > 99 ? '99+ Messages' : `${msgCount} Messages`;
   })();
 
+  function showDelChatToast(chatname: string) {
+    bulmaToast.toast({
+      message: `<strong>${chatname}</strong> Deleted`,
+      type: 'is-danger',
+      duration: 3000,
+      position: 'bottom-center',
+      dismissible: false,
+      pauseOnHover: false,
+      animate: { in: 'fadeInUp', out: 'fadeOutDown' },
+      opacity: 0.8,
+    });
+  }
+  
   async function startEdit() {
     draft = chat.name
     editing = true
@@ -74,6 +88,7 @@
 
   function delChat() {
     if (window.confirm(`Delete chat “${chat.name}”?`)) {
+      showDelChatToast(chat.name)
       if (activeChatId === chat.id) {
         const n = nextChat || prevChat
         replace(n ? `/chat/${n.id}` : '/').then(() => deleteChat(chat.id))
@@ -85,68 +100,77 @@
 </script>
 
 <li class="chat-list-item">
-  {#if editing}
-    <input
-      placeholder="{chat.name}"
-      bind:this={inputEl}
-      bind:value={draft}
-      on:blur={saveEdit}
-      on:keydown={(e) => e.key === 'Enter' && saveEdit()}
-    />
-  {:else}
-    <div
-      class="chat-menu-item"
-      class:is-active={activeChatId === chat.id}
-      on:click|preventDefault={() => {
-        if (!showDetails) {
-          if (!showExample) {
-            $pinMainMenu = false
-            replace(`#/chat/${chat.id}`)
-          }
-        }
-      }}
-    >
-      <div class="chat-text-group">
-        <span class="chat-item-name">
-          <Fa class="chat-icon" size="xs" icon={faMessage} />
-          <span class="chat-text">{chat.name}</span>
-        </span>
-        {#if showDetails}
-          <span class="chat-info">Created: {createdDetail}</span>
-          <span class="chat-info">Last use: {lastUseDetail}</span>
-          <span class="chat-info">Last access: {lastAccessDetail}</span>
-          <span class="chat-info">{count}</span>
-        {:else if $globalStorage.showDetailedChatsInfo}
-          <span class="chat-info">Created: {createdTime}</span>
-          <span class="chat-info">Last use: {lastUseTime}</span>
-          <span class="chat-info">Last access: {lastAccessTime}</span>
-          <span class="chat-info">{count}</span>
+  <div
+    class="chat-menu-item"
+    class:is-active={activeChatId === chat.id}
+    on:click|preventDefault={() => {
+      if (!showDetails && !showExample) {
+        $pinMainMenu = false;
+        replace(`#/chat/${chat.id}`);
+      }
+    }}
+  >
+    <div class="chat-text-group">
+      <span class="chat-item-name">
+        <Fa class="chat-icon" size="xs" icon={faMessage} />
+        {#if editing}
+          <input
+            class="edit-input"
+            placeholder={chat.name}
+            bind:this={inputEl}
+            bind:value={draft}
+            on:blur={saveEdit}
+            on:keydown={(e) => e.key === 'Enter' && saveEdit()}
+          />
         {:else}
-          <span class="chat-info">
-            {createdShort}
-            {#if !$globalStorage.hideMessagesCountOnChat && !showDetails}
-              • {count}
-            {/if}
-          </span>
+          <span class="chat-text">{chat.name}</span>
         {/if}
-      </div>
-      <div class="action-buttons" class:is-disabled-no-opacity={showExample}>
-        {#if !$globalStorage.hideChatRenameButton}
-          <button class="icon-button" hidden={showDetails} on:click|stopPropagation={startEdit}>
-            <Fa icon={faPencil} />
-          </button>
-        {/if}
-        {#if !$globalStorage.hideChatFavoriteButton}
-          <button class="icon-button" hidden={showDetails} on:click|stopPropagation={toggleFavorite}>
-            <Fa icon={chat.isFavorite ? faStarSolid : faStarRegular} />
-          </button>
-        {/if}
-        {#if !$globalStorage.hideChatDeleteButton}
-          <button class="icon-button" on:click|stopPropagation={delChat}>
-            <Fa icon={faTrash} />
-          </button>
-        {/if}
-      </div>
+      </span>
+
+      {#if showDetails}
+        <span class="chat-info">Created: {createdDetail}</span>
+        <span class="chat-info">Last use: {lastUseDetail}</span>
+        <span class="chat-info">Last access: {lastAccessDetail}</span>
+        <span class="chat-info">{count}</span>
+      {:else if $globalStorage.showDetailedChatsInfo}
+        <span class="chat-info">Created: {createdTime}</span>
+        <span class="chat-info">Used: {lastUseTime}</span>
+        <span class="chat-info">Accessed: {lastAccessTime}</span>      
+        <span class="chat-info">{count}</span>
+      {:else}
+        <span class="chat-info">
+          {createdShort}
+          {#if !$globalStorage.hideMessagesCountOnChat && !showDetails}
+            • {count}
+          {/if}
+        </span>
+      {/if}
     </div>
-  {/if}
+
+    <div class="action-buttons" class:is-disabled-no-opacity={showExample}>
+      {#if !$globalStorage.hideChatRenameButton}
+        <button
+          class="icon-button"
+          hidden={showDetails}
+          on:click|stopPropagation={startEdit}
+        >
+          <Fa icon={faPencil} />
+        </button>
+      {/if}
+      {#if !$globalStorage.hideChatFavoriteButton}
+        <button
+          class="icon-button"
+          hidden={showDetails}
+          on:click|stopPropagation={toggleFavorite}
+        >
+          <Fa icon={chat.isFavorite ? faStarSolid : faStarRegular} />
+        </button>
+      {/if}
+      {#if !$globalStorage.hideChatDeleteButton}
+        <button class="icon-button" on:click|stopPropagation={delChat}>
+          <Fa icon={faTrash} />
+        </button>
+      {/if}
+    </div>
+  </div>
 </li>

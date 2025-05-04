@@ -1,7 +1,7 @@
 {
-  "name": "ChatGPT Web",
-  "short_name": "ChatGPT",
-  "description": "Open-source ChatGPT client",
+  "name": "QuarAI",
+  "short_name": "QuarAI",
+  "description": "Open-source OpenAI API client",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",

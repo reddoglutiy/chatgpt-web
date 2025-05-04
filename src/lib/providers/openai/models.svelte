@@ -106,6 +106,13 @@ const gpt4omini = {
   max: 131072 // 128k context window
 }
 
+const chatgpt4olatest = {
+  ...chatModelBase,
+  prompt: 0.000005,    // $0.005 per 1000 tokens prompt
+  completion: 0.000015, // $0.015 per 1000 tokens completion
+  max: 131072 // 128k context window
+};
+
 const o1preview = {
   ...chatModelBase,
   prompt: 0.000015, // $0.015 per 1000 tokens prompt
@@ -191,6 +198,7 @@ export const chatModels : Record<string, ModelDetail> = {
   'gpt-4.1-mini': { ...gpt41mini },
   'gpt-4.1-nano': { ...gpt41nano },
   'gpt-4o': { ...gpt4o },
+  'chatgpt-4o-latest': { ...chatgpt4olatest },
   'gpt-4o-mini': { ...gpt4omini },
   'gpt-4o-mini-2024-07-18': { ...gpt4omini },
   'gpt-4-turbo-preview': { ...gpt4128kpreview },

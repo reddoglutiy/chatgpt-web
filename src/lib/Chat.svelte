@@ -1,4 +1,6 @@
 <script lang="ts">
+  import * as bulmaToast from 'bulma-toast';
+
   import {
     saveChatStore,
     chatsStorage,
@@ -31,21 +33,11 @@
     faLightbulb,
     faCommentSlash,
     faCircleCheck,
-
     faSeedling,
-
     faPaperclip,
-
     faLocationArrow,
-
     faArrowRight,
-
     faClose
-
-
-
-
-
   } from '@fortawesome/free-solid-svg-icons/index'
   import { v4 as uuidv4 } from 'uuid'
   import { getPrice } from './Stats.svelte'
@@ -70,8 +62,17 @@
   $: chat = $chatsStorage.find((chat) => chat.id === chatId) as Chat
   $: chatSettings = chat?.settings
   let showSettingsModal
-
+  
   let scDelay
+  let isDark = false;
+
+  onMount(() => {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    isDark = prefersDark;
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      isDark = e.matches;
+    });
+  });
   const onStateChange = async (...args:any) => {
     if (!chat) return
     clearTimeout(scDelay)
@@ -185,6 +186,18 @@
   const focusInput = () => {
     input.focus()
     scrollToBottom()
+  }
+
+  function showToast() {
+    bulmaToast.toast({
+      message: 'Test message',
+      type: 'is-info',
+      duration: 3000,
+      position: 'bottom-center',
+      dismissible: false,
+      pauseOnHover: false,
+      animate: { in: 'fadeInDown', out: 'flipOutX' },
+    });
   }
 
   const addNewMessage = () => {
@@ -427,12 +440,12 @@
   </article>
 {/if}
 </div>
-<Footer class="prompt-input-container" strongMask={true}>
-  <form class="field has-addons has-addons-right is-align-items-flex-end" style="margin-bottom: 1rem;" on:submit|preventDefault={() => submitForm()}>
+<Footer class="prompt-input-container" strongMask={false}>
+  <form class="field has-addons has-addons-right is-align-items-flex-end" style="margin-bottom: 2rem; margin-top: 1rem;" on:submit|preventDefault={() => submitForm()}>
     <p class="control is-expanded">
       <textarea
-        class="input is-info is-focused chat-input auto-size"
-        placeholder="[{(chat?.settings?.model || "gpt-3.5-turbo")}] Ask anything"
+        class="is-info is-focused chat-input auto-size"
+        placeholder="Ask anything"
         rows="1"
         on:keydown={e => {
           // Only send if Enter is pressed, not Shift+Enter
@@ -447,17 +460,9 @@
         bind:this={input}
       />
     </p>
-    <!-- <p class="control mic" class:is-hidden={!recognition}>
-      <button class="button" class:is-disabled={chatRequest.updating} class:is-pulse={recording} on:click|preventDefault={recordToggle}
-        ><span class="icon"><Fa icon={faMicrophone} /></span></button
-      >
-    </p> -->
-    <!-- <p class="control queue">
-      <button title="Queue message, don't send yet" class:is-disabled={chatRequest.updating} class="button is-ghost" on:click|preventDefault={addNewMessage}><span class="icon"><Fa icon={faArrowUpFromBracket} /></span></button>
-    </p> -->
     {#if chatRequest.updating}
-    <p class="control send">
-      <button title="Cancel Response" class="button is-danger" type="button" on:click={cancelRequest}><span class="icon">
+    <p class="send">
+      <button title="Cancel Response" style="width: 35px; height: 35px;" class="button is-rounded {isDark ? 'is-light' : 'is-dark'}" type="button" on:click={cancelRequest}><span class="icon">
         {#if waitingForCancel}
         <Fa icon={faCircleCheck} />
         {:else}
@@ -466,10 +471,18 @@
       </span></button>
     </p>
     {:else}
-    <p class="control send">
-      <button title="Send" class="button is-info" type="submit"><span class="icon"><Fa icon={faArrowRight} /></span></button>
+    <p class="send">
+      <button title="Send" style="width: 35px; height: 35px;" class="button is-rounded {isDark ? 'is-light' : 'is-dark'}" type="submit"><span class="icon"><Fa icon={faArrowRight} /></span></button>
     </p>
     {/if}
+    <!-- <p class="control mic" class:is-hidden={!recognition}>
+      <button class="button" class:is-disabled={chatRequest.updating} class:is-pulse={recording} on:click|preventDefault={recordToggle}
+        ><span class="icon"><Fa icon={faMicrophone} /></span></button
+      >
+    </p> -->
+    <!-- <p class="control queue">
+      <button title="Queue message, don't send yet" class:is-disabled={chatRequest.updating} class="button is-ghost" on:click|preventDefault={addNewMessage}><span class="icon"><Fa icon={faArrowUpFromBracket} /></span></button>
+    </p> -->
   </form>
   <!-- a target to scroll to -->
   <!-- <div class="content has-text-centered running-total-container">

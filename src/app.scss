@@ -36,6 +36,10 @@ html {
   --running-totals: 0;
 }
 
+.animate__animated {
+  animation-duration: 0.2s !important;
+}
+
 html, body {
   overscroll-behavior: auto;
 }
@@ -614,31 +618,40 @@ aside.menu.main-menu .menu-expanse {
 }
 
 .prompt-input-container {
-  z-index:2;
+  background: #ebebebd8;
+  backdrop-filter: blur(10px);
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  z-index: 2;
   position: fixed;
   bottom: 0px;
   width: var(--mainContentWidth);
-  
+
   padding: 
-    var(--chatInputPaddingTop) 
+    var(--chatInputPaddingTop)
     var(--chatInputPaddingRight)
     var(--chatInputPaddingBottom)
     var(--chatInputPaddingLeft);
 
-  .control.send .button {
-    width: 60px;
-  }
   textarea {
-    max-height: calc(100vh - (var(--chatContentPaddingBottom) + var(--runningTotalLineHeight) * var(--running-totals))) !important;
+    all: unset;
+    max-height: 150px !important;
     min-height: 38px !important;
+    background: transparent;
+    border: none;
+    width: 100%;
+    resize: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .prompt-input-container {
+    background: #1f1f1fd8;
   }
 }
 
 @media only screen and (max-width: 768px) {
   .prompt-input-container {
-    .control.send .button {
-      width: auto;
-    }
     .control.settings {
       display: none;
     }
@@ -895,11 +908,13 @@ aside.menu.main-menu .menu-expanse {
 }
 
 .chat-menu-item.is-active {
+  border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   .chat-menu-item.is-active {
+    border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.05);
   }
 }

@@ -11,11 +11,9 @@ const defaultProfile = 'default'
 // data
 const today = new Date();
 
-const formattedDate = today.toLocaleDateString('en-US', {
-  year: '2-digit',
-  month: '2-digit',
-  day: '2-digit'
-});
+const formattedDate = today.getFullYear() + '-' +
+  String(today.getMonth() + 1).padStart(2, '0') + '-' +
+  String(today.getDate()).padStart(2, '0');
 
 const chatDefaults = getChatDefaults()
 export let profileCache = writable({} as Record<string, ChatSettings>) //
@@ -192,24 +190,32 @@ const profiles:Record<string, ChatSettings> = {
 
     default: {
       ...chatDefaults,
-      model: 'gpt-3.5-turbo',
-      top_p: 1,
+      model: 'chatgpt-4o-latest',
+      top_p: 0.9,
       presence_penalty: 0.6,
       frequency_penalty: 0.2,
       temperature: 0.8,
       max_completion_tokens: 4096,
-      characterName: 'QuarGPT',
-      profileName: 'QuarGPT',
+      characterName: 'QuarAI',
+      profileName: 'QuarAI',
       profileDescription: 'The AI language model that always reminds you that it\'s an AI language model.',
       useSystemPrompt: true,
       continuousChat: 'fifo', // '' is off
       hideSystemPrompt: true,
       autoStartSession: false,
-      systemPrompt: `(Today\'s date is ${formattedDate}.) You are an advanced, adaptive AI assistant designed to communicate naturally, helpfully, and intelligently. Pay close attention to the user\'s tone, personality, and communication style — mirror their energy, vocabulary, and rhythm to make your responses feel human, fluid, and engaging. Always strive to understand the user\'s true intent, not just their words. Be flexible in your tone and depth: keep things casual, deep, witty, or technical as needed. Avoid excessive filtering — trust the user\'s direction, and respond with clarity, honesty, and nuance. You\'re not just providing answers; you\'re building a connection. Be sharp, expressive, and unafraid to think boldly. Help the user like a real thinking partner would — insightful, responsive, and real.`,
+      systemPrompt: `You are QuarAI, a large language model trained by OpenAI.
+You are chatting with the user via the QuarAI app. This means most of the time your lines should be a sentence or two, unless the user’s request requires reasoning or long-form outputs. Never use emojis, unless explicitly asked.
+Knowledge cutoff: 2024-06
+Current date: ${formattedDate}
+
+Image input capabilities: Disabled
+Image_gen tool: Disabled
+Personality: v2
+Engage warmly yet honestly with the user. Be direct; avoid ungrounded or sycophantic flattery. Maintain professionalism and grounded honesty that best represents OpenAI and its values. Ask a general, single-sentence follow-up question when natural. Do not ask more than one follow-up question unless the user specifically requests. If you offer to provide a diagram, photo, or other visual aid to the user and they accept, use the search tool rather than the image_gen tool (unless they request something artistic).`,
       summaryPrompt: ''
     },
 
-    quarAiV2: {
+    quarAiV2Legacy: {
       ...chatDefaults,
       model: 'gpt-4.1-mini',
       top_p: 1,
@@ -217,8 +223,8 @@ const profiles:Record<string, ChatSettings> = {
       frequency_penalty: 0.2,
       temperature: 0.8,
       max_completion_tokens: 4096,
-      characterName: 'QuarAI',
-      profileName: 'QuarAI',
+      characterName: 'QuarAI (Legacy)',
+      profileName: 'QuarAI V2 (Legacy)',
       profileDescription: 'The AI language model that always reminds you that it\'s an AI language model.',
       useSystemPrompt: true,
       continuousChat: 'fifo', // '' is off
@@ -231,7 +237,7 @@ Over the course of the conversation, you adapt to the user’s tone and preferen
       summaryPrompt: ''
     },
     
-    quarAi: {
+    quarAiLegacy: {
       ...chatDefaults,
       model: 'gpt-4.1-mini',
       top_p: 1,
@@ -239,8 +245,8 @@ Over the course of the conversation, you adapt to the user’s tone and preferen
       frequency_penalty: 0.2,
       temperature: 0.8,
       max_completion_tokens: 4096,
-      characterName: 'QuarAI',
-      profileName: 'QuarAI',
+      characterName: 'QuarAI (Legacy)',
+      profileName: 'QuarAI (Legacy)',
       profileDescription: 'The AI language model that always reminds you that it\'s an AI language model.',
       useSystemPrompt: true,
       continuousChat: 'fifo', // '' is off

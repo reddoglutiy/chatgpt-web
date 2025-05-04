@@ -107,11 +107,6 @@
   }
 
 </script>
-<style>
-  html, body {
-    overscroll-behavior: none;
-  }
-</style>
 <section class="section" style="padding-top: 0;">
   <article class="message is-success">
     <div class="message-header">

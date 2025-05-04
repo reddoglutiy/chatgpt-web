@@ -31,7 +31,7 @@ onMount(() => {
   <div class="navbar-brand">
     <div class="navbar-item" style="margin-left: 0.55rem;">
       {#if $pinMainMenu}
-        <span class="icon" on:click|stopPropagation={() => $pinMainMenu = false}>
+        <span class="icon">
           <Fa icon={faXmark} />
         </span>
       {:else}
@@ -39,7 +39,7 @@ onMount(() => {
           <Fa icon={faBars} />
         </span>
       {/if}
-    </div>    
+    </div>
     <div class="chat-option-menu navbar-item" class:is-hidden={$globalStorage.hideTitleInNavbar}>
       <a class="navbar-item" href={'#/'}>
         <div class="title-container ml-2" style="text-align: center; width: 100%;">
