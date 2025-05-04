@@ -262,20 +262,40 @@ select option.is-default {
 }
 
 .user-message {
+  border-radius: 20px !important;
   max-width: 90%;
   margin-right: 0;
   margin-left: auto;
   width: fit-content;
 }
 
+.msg-image-assistant {
+  opacity: 70%;
+  border-width: 0 0 0 0 !important;
+  background-color: transparent !important;
+}
+
 .assistant-message {
-  max-width: 90%;
-  width: fit-content;
+  background-color: transparent !important;
+  width: 100%;
 }
 
 /* Swap the border on user messages to the other side */
 .user-message>.message-body {
-  border-width: 0 4px 0 0 !important;
+  border-width: 0 0px 0 0 !important;
+}
+
+.assistant-message>.message-body {
+  font-size: 0.95rem;
+  border-width: 0 0 0 0 !important;
+  color: #2a2a2a;
+}
+
+.message-time {
+  font-size: 0.75rem;
+  color: #999;
+  text-align: right;
+  margin-top: 4px;
 }
 
 /* Show the edit button on hover of the chat name */
@@ -635,8 +655,12 @@ aside.menu.main-menu .menu-expanse {
 
   textarea {
     all: unset;
+    overflow-y: auto;
+    white-space: pre-wrap !important;
+    word-wrap: break-word;  
     max-height: 150px !important;
     min-height: 38px !important;
+    text-wrap: prewrap;
     background: transparent;
     border: none;
     width: 100%;
@@ -742,6 +766,7 @@ aside.menu.main-menu .menu-expanse {
   transition: 0.3s;
 }
 .chat-message {
+  word-wrap: break-word;  
   font-size: 0.9rem;
 }
 
@@ -829,7 +854,7 @@ aside.menu.main-menu .menu-expanse {
 .message.streaming .message-display > p:last-child::after,
 .message.streaming .message-display > .code-block:last-child > pre code:last-of-type::after {
   position: relative;
-  content: '❚';
+  content: '●';
   animation: cursor-blink 1s steps(2) infinite;
 }
 

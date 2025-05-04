@@ -6,16 +6,22 @@
   import SvelteMarkdown from 'svelte-markdown'
   import type { Message, Model, Chat } from './Types.svelte'
   import Fa from 'svelte-fa/src/fa.svelte'
-  import { faTrash, faDiagramPredecessor, faDiagramNext, faCircleCheck, faPaperPlane, faEye, faEyeSlash, faEllipsis, faDownload, faClipboard } from '@fortawesome/free-solid-svg-icons/index'
+  import { faTrash, faDiagramPredecessor, faDiagramNext, faCircleCheck, faPaperPlane, faEye, faEyeSlash, faEllipsis, faDownload, faClipboard, faTrashRestoreAlt, faCog, faSpinner, faCircleUser, faRedo } from '@fortawesome/free-solid-svg-icons/index'
   import { errorNotice, scrollToMessage } from './Util.svelte'
   import { openModal } from 'svelte-modals'
   import PromptConfirm from './PromptConfirm.svelte'
   import { getImage } from './ImageStore.svelte'
   import { getModelDetail } from './Models.svelte'
+    import { faCopy, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
   export let message:Message
   export let chatId:number
   export let chat:Chat
+
+  const optsTime = { hour: '2-digit', minute: '2-digit', hour12: false }
+  const optsTimeWithSeconds = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }
+  const formatTime = (ts: number) => 
+  new Date(ts).toLocaleTimeString([], $globalStorage.showSecondOnMessagesTimestamp ? optsTimeWithSeconds : optsTime);
 
   $: chatSettings = chat.settings
 
@@ -220,7 +226,6 @@
   id="{'message-' + message.uuid}"
   class="message chat-message"
   class:is-hidden={$globalStorage.hideSystemPromptInChat && isSystem}
-  class:is-info={isUser}
   class:is-success={isAssistant || isImage}
   class:is-warning={isSystem}
   class:is-danger={isError}
@@ -233,7 +238,7 @@
   class:incomplete={message.finish_reason === 'length'}
 >
   <div class="message-body content">
-    {#if editing}
+    {#if (editing && !isError && !isAssistant && !isImage) || $globalStorage.allowEditAssistantMessage}
       <form class="message-edit" on:submit|preventDefault={update} on:keydown={keydown}>
         <div id={'edit-' + message.uuid} class="message-editor" bind:innerText={message.content} contenteditable
         on:input={update} on:blur={exit} />
@@ -272,7 +277,88 @@
       <span>${getPrice(message.usage, message.model || defaultModel).toFixed(6)}</span>
     </p>    
     {/if}
+    {#if message.timestamp && !isAssistant && !isError && !isSystem && $globalStorage.showTimestampOnMessages}
+     <p class="message-time">{formatTime(message.timestamp)}</p>
+    {/if}
+    {#if !isImage && !isUser && !isSystem}
+        <a
+          href={'#'}
+          title="Copy to Clipboard"
+          class="msg-image msg-image-assistant button is-small"
+          style="margin-top: 5px;"
+          on:click|preventDefault={() => {
+            navigator.clipboard.writeText(message.content)
+          }}
+        >
+        <span class="icon"><Fa icon={faCopy} /></span>
+        </a>
+    {/if}
+    {#if !message.summarized && !isSystem && !isUser}
+      <a
+        href={'#'}
+        title="Delete this message"
+        class="msg-delete msg-image-assistant button is-small"
+        style="margin-top: 5px;"
+        on:click|preventDefault={() => {
+          checkDelete()
+        }}
+      >
+      {#if waitingForDeleteConfirm}
+      <span class="icon"><Fa icon={faCircleCheck} /></span>
+      {:else}
+      <span class="icon"><Fa icon={faTrashCan} /></span>
+      {/if}
+      </a>
+    {/if}
+    {#if !isImage && !message.summarized && !isSystem && !isUser}
+        <a
+          href={'#'}
+          title={(message.suppress ? 'Uns' : 'S') + 'uppress message from submission'}
+          class="msg-supress msg-image-assistant button is-small"
+          style="margin-top: 5px;"
+          on:click|preventDefault={() => {
+            setSuppress(!message.suppress)
+          }}
+        >
+        {#if message.suppress}
+        <span class="icon"><Fa icon={faEye} /></span>
+        {:else}
+        <span class="icon"><Fa icon={faEyeSlash} /></span>
+        {/if}
+        </a>
+    {/if}
+    {#if imageUrl}
+        <a
+          href={'#'}
+          title="Download Image"
+          class="msg-image msg-image-assistant button is-small"
+          style="margin-top: 5px;"
+          on:click|preventDefault={() => {
+            downloadImage()
+          }}
+        >
+        <span class="icon"><Fa icon={faDownload} /></span>
+        </a>
+    {/if}
+    {#if !isImage && !message.summarized && !isUser && !isError && !isSystem}
+        <a
+          href={'#'}
+          title="Truncate from here and send"
+          class="msg-truncate msg-image-assistant button is-small"
+          style="margin-top: 5px;"
+          on:click|preventDefault={() => {
+            checkTruncate()
+          }}
+        >
+        {#if waitingForTruncateConfirm}
+        <span class="icon"><Fa icon={faCircleCheck} /></span>
+        {:else}
+        <span class="icon"><Fa icon={faRedo} /></span>
+        {/if}
+        </a>
+    {/if}
   </div>
+  {#if !isAssistant && !isError && !isImage}
   <div class="tool-drawer-mask"></div>
   <div class="tool-drawer">
     <div class="button-pack">
@@ -312,7 +398,7 @@
       <span class="icon"><Fa icon={faDiagramPredecessor} /></span>
       </a>
       {/if}
-      {#if !message.summarized}
+      {#if !message.summarized && !isError && !isAssistant}
       <a
         href={'#'}
         title="Delete this message"
@@ -385,6 +471,6 @@
         </a>
       {/if}
       </div>
-
   </div>
+  {/if}
 </article>

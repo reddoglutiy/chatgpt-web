@@ -36,6 +36,7 @@ export type Message = {
     created?: number;
     skipOnce?: boolean;
     appendOnce?: string[];
+    timestamp?: number;
   };
 
 export type ResponseAlteration = {
@@ -172,6 +173,9 @@ export type GlobalSettings = {
     hideChatDeleteButton: boolean;
     hideSystemPromptInChat: boolean;
     hideMessagesCountOnChat: boolean;
+    allowEditAssistantMessage: boolean;
+    showTimestampOnMessages: boolean;
+    showSecondOnMessagesTimestamp: boolean;
   };
 
   type SettingNumber = {
