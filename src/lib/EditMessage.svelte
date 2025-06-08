@@ -226,11 +226,11 @@
   id="{'message-' + message.uuid}"
   class="message chat-message"
   class:is-hidden={$globalStorage.hideSystemPromptInChat && isSystem}
-  class:is-success={isAssistant || isImage}
   class:is-warning={isSystem}
   class:is-danger={isError}
   class:user-message={isUser || isSystem}
-  class:assistant-message={isError || isAssistant || isImage}
+  class:assistant-message={isAssistant || isImage}
+  class:error-message={isError}
   class:summarized={message.summarized}
   class:suppress={message.suppress} 
   class:editing={editing}

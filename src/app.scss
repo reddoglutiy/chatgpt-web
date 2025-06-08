@@ -41,6 +41,7 @@ html {
 }
 
 html, body {
+  color: white !important;
   overscroll-behavior: auto;
 }
 
@@ -275,7 +276,21 @@ select option.is-default {
   background-color: transparent !important;
 }
 
+.error-message {
+  color: #FF6347;
+  font-weight: 500;
+  background-color: transparent !important;
+  width: 100%;
+}
+
+.error-message>.message-body {
+  font-size: 0.95rem;
+  border-width: 0 0 0 0 !important;
+  color: #2a2a2a;
+}
+
 .assistant-message {
+  font-weight: 500;
   background-color: transparent !important;
   width: 100%;
 }
